@@ -1,6 +1,6 @@
-#define AppName "AlphaPlay"
+﻿#define AppName "AlphaPlay"
 #ifndef AppVersion
-  #define AppVersion "1.0.0"
+  #define AppVersion "1.0.2"
 #endif
 #define AppPublisher "AlphaPlay"
 #define AppExeName "AlphaPlay.exe"
@@ -47,3 +47,7 @@ Filename: "{app}\{#AppExeName}"; Description: "Executar {#AppName} agora"; Flags
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}"
+
+
+
+

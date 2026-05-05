@@ -758,10 +758,26 @@ self.addEventListener('fetch', event => {
       if (currentTab === 'tracks') renderTracks(); else renderQueue();
     }
 
+    function normalizeSearchText(value) {
+      return (value || '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function itemStartsWithSearch(item, search) {
+      if (!search) return true;
+      const title = normalizeSearchText(item.title);
+      const fileName = normalizeSearchText(item.fileName);
+      const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, '');
+      return title.startsWith(search) || fileName.startsWith(search) || fileNameWithoutExtension.startsWith(search);
+    }
+
     function renderTracks() {
       const list = document.getElementById('list');
-      const search = document.getElementById('search').value.trim().toLowerCase();
-      const filtered = tracks.filter(item => !search || (item.title || '').toLowerCase().includes(search) || (item.fileName || '').toLowerCase().includes(search));
+      const search = normalizeSearchText(document.getElementById('search').value);
+      const filtered = tracks.filter(item => itemStartsWithSearch(item, search));
       if (filtered.length === 0) {
         list.innerHTML = '<div class="empty-box">Nenhuma música encontrada. Atualize a biblioteca no AlphaPlay do computador ou confira a pasta selecionada.</div>';
         return;
@@ -780,8 +796,8 @@ self.addEventListener('fetch', event => {
 
     function renderQueue() {
       const list = document.getElementById('list');
-      const search = document.getElementById('search').value.trim().toLowerCase();
-      const filtered = queue.filter(item => !search || (item.title || '').toLowerCase().includes(search) || (item.fileName || '').toLowerCase().includes(search));
+      const search = normalizeSearchText(document.getElementById('search').value);
+      const filtered = queue.filter(item => itemStartsWithSearch(item, search));
       if (queue.length === 0) {
         list.innerHTML = '<div class="empty-box">A fila está vazia. Entre em Músicas e adicione itens à fila.</div>';
         return;

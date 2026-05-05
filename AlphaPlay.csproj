@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -10,9 +10,9 @@
     <ApplicationIcon>assets\brand\app_icon.ico</ApplicationIcon>
     <AssemblyName>AlphaPlay</AssemblyName>
     <RootNamespace>AlphaPlay</RootNamespace>
-    <Version>1.0.0</Version>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0</FileVersion>
+    <Version>1.0.2</Version>
+    <AssemblyVersion>1.0.2</AssemblyVersion>
+    <FileVersion>1.0.2</FileVersion>
     <Authors>AlphaPlay</Authors>
     <Product>AlphaPlay</Product>
   </PropertyGroup>
@@ -43,3 +43,6 @@
   </ItemGroup>
 
 </Project>
+
+
+

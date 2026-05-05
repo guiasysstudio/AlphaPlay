@@ -4,10 +4,14 @@ setlocal
 
 REM ============================================================
 REM AlphaPlay - Gerador do instalador final
-REM Altere a versao abaixo quando for gerar uma nova versao.
-REM O instalador final sera: installer\output\AlphaPlay_Setup_%APP_VERSION%.exe
+REM Uso:
+REM   gerar_instalador.bat
+REM   gerar_instalador.bat 1.0.2
 REM ============================================================
+
 set APP_VERSION=1.0.0
+if not "%~1"=="" set APP_VERSION=%~1
+
 set APP_NAME=AlphaPlay
 
 cd /d "%~dp0"
@@ -24,8 +28,8 @@ if not exist "installer\AlphaPlay.iss" (
     exit /b 1
 )
 
-REM 1) Publica o programa primeiro, sem pausar no meio.
-call "%~dp0publicar_alpha.bat" /nopause
+REM 1) Publica o programa primeiro, ja com a versao correta.
+call "%~dp0publicar_alpha.bat" /nopause %APP_VERSION%
 if errorlevel 1 goto erro
 
 REM 2) Localiza o compilador do Inno Setup.

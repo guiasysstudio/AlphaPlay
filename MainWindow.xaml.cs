@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Diagnostics;
 using System.Linq;
 using System.IO;
@@ -12,6 +13,7 @@ using AlphaPlay.Models;
 using AlphaPlay.Services;
 using LibVLCSharp.Shared;
 using WinForms = System.Windows.Forms;
+using System.Text;
 
 namespace AlphaPlay
 {
@@ -790,13 +792,12 @@ namespace AlphaPlay
 
         private void ApplySearch()
         {
-            string search = TxtSearch.Text?.Trim().ToLower() ?? string.Empty;
+            string search = NormalizeSearchText(TxtSearch.Text);
 
             List<MusicFile> result = string.IsNullOrWhiteSpace(search)
                 ? _allMusics
                 : _allMusics
-                    .Where(music => music.Title.ToLower().Contains(search) ||
-                                    music.FileName.ToLower().Contains(search))
+                    .Where(music => MusicMatchesSearch(music, search))
                     .ToList();
 
             _filteredMusics.Clear();
@@ -807,6 +808,37 @@ namespace AlphaPlay
             }
 
             TxtLibraryCount.Text = $"{_filteredMusics.Count} música(s) encontrada(s)";
+        }
+
+        private static bool MusicMatchesSearch(MusicFile music, string normalizedSearch)
+        {
+            if (string.IsNullOrWhiteSpace(normalizedSearch))
+            {
+                return true;
+            }
+
+            string title = NormalizeSearchText(music.Title);
+            string fileName = NormalizeSearchText(music.FileName);
+            string fileNameWithoutExtension = NormalizeSearchText(Path.GetFileNameWithoutExtension(music.FileName));
+
+            return title.StartsWith(normalizedSearch, StringComparison.OrdinalIgnoreCase) ||
+                   fileName.StartsWith(normalizedSearch, StringComparison.OrdinalIgnoreCase) ||
+                   fileNameWithoutExtension.StartsWith(normalizedSearch, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string NormalizeSearchText(string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return string.Empty;
+            }
+
+            string normalized = value.Trim().Normalize(NormalizationForm.FormD);
+            char[] chars = normalized
+                .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                .ToArray();
+
+            return new string(chars).Normalize(NormalizationForm.FormC).ToLowerInvariant();
         }
 
         private void LoadSavedPlaylists(int? selectPlaylistId = null)

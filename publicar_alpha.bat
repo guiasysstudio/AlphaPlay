@@ -4,13 +4,23 @@ setlocal
 
 REM ============================================================
 REM AlphaPlay - Publicacao do programa
-REM Altere a versao abaixo quando for gerar uma nova versao.
-REM Exemplo: 1.0.0, 1.0.1, 1.1.0
+REM Uso:
+REM   publicar_alpha.bat
+REM   publicar_alpha.bat 1.0.2
+REM   publicar_alpha.bat /nopause 1.0.2
 REM ============================================================
+
 set APP_VERSION=1.0.0
 set APP_NAME=AlphaPlay
 set RUNTIME=win-x64
-set NO_PAUSE=%~1
+set NO_PAUSE=
+
+if /I "%~1"=="/nopause" (
+    set NO_PAUSE=/nopause
+    if not "%~2"=="" set APP_VERSION=%~2
+) else (
+    if not "%~1"=="" set APP_VERSION=%~1
+)
 
 cd /d "%~dp0"
 
@@ -59,6 +69,7 @@ echo.
 echo ============================================================
 echo Publicacao concluida com sucesso.
 echo Saida: %CD%\publish
+echo Versao real publicada: %APP_VERSION%
 echo ATENCAO: publish\AlphaPlay.exe nao e o instalador.
 echo O instalador final e gerado por gerar_instalador.bat.
 echo ============================================================
