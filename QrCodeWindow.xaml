@@ -1,0 +1,131 @@
+<Window x:Class="AlphaPlay.QrCodeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="QR Code do controle remoto"
+        Icon="assets/brand/app_icon.ico"
+        Height="560"
+        Width="420"
+        MinHeight="540"
+        MinWidth="400"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#070B1A">
+
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#1A2744"/>
+            <Setter Property="BorderBrush" Value="#314061"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Root"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#22365E"/>
+                                <Setter Property="BorderBrush" Value="#00D9FF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#10203B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border Margin="18"
+            Padding="18"
+            Background="#121A2E"
+            BorderBrush="#223055"
+            BorderThickness="1"
+            CornerRadius="18">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0">
+                <TextBlock Text="QR Code do controle remoto"
+                           FontSize="23"
+                           FontWeight="Bold"/>
+                <TextBlock Text="Aponte a câmera do celular para abrir o controle do AlphaPlay na mesma rede."
+                           Foreground="#9FB0D0"
+                           TextWrapping="Wrap"
+                           Margin="0,6,0,0"/>
+            </StackPanel>
+
+            <Grid Grid.Row="1"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Stretch"
+                  Margin="0,20,0,18">
+                <StackPanel HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                    <Border Background="White"
+                            Width="320"
+                            Height="320"
+                            Padding="20"
+                            CornerRadius="16"
+                            HorizontalAlignment="Center">
+                        <Grid HorizontalAlignment="Center"
+                              VerticalAlignment="Center">
+                            <Image x:Name="ImgQrCode"
+                                   Width="260"
+                                   Height="260"
+                                   Stretch="Uniform"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Margin="0,16,0,0"
+                            Padding="12"
+                            Background="#0C1426"
+                            BorderBrush="#26365F"
+                            BorderThickness="1"
+                            CornerRadius="12"
+                            Width="330"
+                            HorizontalAlignment="Center">
+                        <TextBlock x:Name="TxtQrLink"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Center"
+                                   FontWeight="SemiBold"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        Content="Copiar link"
+                        Width="130"
+                        HorizontalAlignment="Left"
+                        Click="BtnCopyLink_Click"/>
+                <Button Grid.Column="1"
+                        Content="Fechar"
+                        Width="110"
+                        Click="BtnClose_Click"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

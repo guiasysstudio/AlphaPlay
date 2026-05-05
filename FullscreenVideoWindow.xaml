@@ -1,0 +1,29 @@
+<Window x:Class="AlphaPlay.FullscreenVideoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vlc="clr-namespace:LibVLCSharp.WPF;assembly=LibVLCSharp.WPF"
+        Title="AlphaPlay - Vídeo"
+        Icon="assets/brand/app_icon.ico"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="Manual"
+        Background="Black"
+        Topmost="True"
+        KeyDown="Window_KeyDown"
+        MouseDoubleClick="Window_MouseDoubleClick"
+        Focusable="True">
+    <Grid Background="Black">
+        <vlc:VideoView x:Name="FullscreenVideoView"/>
+        <Border x:Name="HintPanel"
+                Background="#AA111827"
+                CornerRadius="8"
+                Padding="12"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="16">
+            <TextBlock Text="F ou ESC para fechar tela cheia"
+                       Foreground="White"
+                       FontSize="13"/>
+        </Border>
+    </Grid>
+</Window>

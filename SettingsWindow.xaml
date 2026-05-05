@@ -1,0 +1,307 @@
+<Window x:Class="AlphaPlay.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Configurações do AlphaPlay"
+        Icon="assets/brand/app_icon.ico"
+        Height="560"
+        Width="680"
+        MinHeight="500"
+        MinWidth="640"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize"
+        Background="#070B1A">
+
+    <Window.Resources>
+        <LinearGradientBrush x:Key="CardBrush" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#121A2E" Offset="0"/>
+            <GradientStop Color="#17233C" Offset="1"/>
+        </LinearGradientBrush>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#1A2744"/>
+            <Setter Property="BorderBrush" Value="#314061"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Root" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Root" Property="Background" Value="#22365E"/><Setter Property="BorderBrush" Value="#00D9FF"/></Trigger>
+                            <Trigger Property="IsPressed" Value="True"><Setter TargetName="Root" Property="Background" Value="#10203B"/></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#E5F8FF"/>
+            <Setter Property="Margin" Value="0,8,0,0"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#0C1426"/>
+            <Setter Property="BorderBrush" Value="#26365F"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,6"/>
+        </Style>
+        <Style x:Key="SliderRepeatButtonStyle" TargetType="RepeatButton">
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RepeatButton">
+                        <Border Height="5" CornerRadius="3" Background="{TemplateBinding Background}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SliderThumbStyle" TargetType="Thumb">
+            <Setter Property="Width" Value="16"/>
+            <Setter Property="Height" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Grid>
+                            <Ellipse Fill="#E8FBFF" Stroke="#00D9FF" StrokeThickness="1.2">
+                                <Ellipse.Effect>
+                                    <DropShadowEffect Color="#00D9FF" BlurRadius="10" ShadowDepth="0" Opacity="0.45"/>
+                                </Ellipse.Effect>
+                            </Ellipse>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Slider">
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Foreground" Value="#00D9FF"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid VerticalAlignment="Center">
+                            <Track x:Name="PART_Track" Height="18">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="Slider.DecreaseLarge" Background="#00D9FF" Style="{StaticResource SliderRepeatButtonStyle}"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="Slider.IncreaseLarge" Background="#394968" Style="{StaticResource SliderRepeatButtonStyle}"/>
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource SliderThumbStyle}"/>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Foreground" Value="#0F172A"/>
+            <Setter Property="Background" Value="#F3F7FF"/>
+            <Setter Property="BorderBrush" Value="#4FDFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,2"/>
+        </Style>
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="#0F172A"/>
+            <Setter Property="Background" Value="#F8FAFC"/>
+            <Setter Property="Padding" Value="8,5"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,14">
+            <TextBlock Text="Configurações"
+                       FontSize="26"
+                       FontWeight="Bold"/>
+            <TextBlock Text="Preferências locais salvas em AppData\\Local\\AlphaPlay\\settings.json"
+                       Foreground="#9FB0D0"
+                       FontSize="12"
+                       Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Padding="0,0,6,0">
+            <Border Background="{StaticResource CardBrush}"
+                    BorderBrush="#223055"
+                    BorderThickness="1"
+                    CornerRadius="18"
+                    Padding="16">
+                <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0">
+                    <TextBlock Text="Pasta das músicas"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,8"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="110"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="TxtMusicFolder"
+                                 Grid.Column="0"
+                                 Height="32"
+                                 FontSize="13"
+                                 Padding="8,5"/>
+                        <Button Grid.Column="1"
+                                Content="Alterar"
+                                Margin="8,0,0,0"
+                                Click="BtnChangeFolder_Click"/>
+                        <Button Grid.Column="2"
+                                Content="Abrir pasta"
+                                Margin="8,0,0,0"
+                                Click="BtnOpenFolder_Click"/>
+                        <Button Grid.Column="3"
+                                Content="Pasta padrão"
+                                Margin="8,0,0,0"
+                                Click="BtnDefaultFolder_Click"/>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Margin="0,22,0,0">
+                    <TextBlock Text="Volume padrão"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,8"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Slider x:Name="SliderDefaultVolume"
+                                Width="260"
+                                Minimum="0"
+                                Maximum="100"
+                                TickFrequency="5"
+                                IsSnapToTickEnabled="False"
+                                ValueChanged="SliderDefaultVolume_ValueChanged"
+                                PreviewMouseWheel="SliderDefaultVolume_PreviewMouseWheel"/>
+                        <TextBlock x:Name="TxtVolumeValue"
+                                   Text="80%"
+                                   Foreground="#DCE7FF"
+                                   Width="60"
+                                   Margin="12,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Margin="0,22,0,0">
+                    <TextBlock Text="Modo padrão ao finalizar música"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,8"/>
+                    <ComboBox x:Name="ComboDefaultPlayMode"
+                              Width="190"
+                              Height="32"
+                              HorizontalAlignment="Left">
+                        <ComboBoxItem Content="Parar"/>
+                        <ComboBoxItem Content="Tocar próxima"/>
+                        <ComboBoxItem Content="Tocar todas"/>
+                    </ComboBox>
+                </StackPanel>
+
+                <Border Grid.Row="3"
+                        Margin="0,22,0,0"
+                        Background="#0C1426"
+                        BorderBrush="#26365F"
+                        BorderThickness="1"
+                        CornerRadius="14"
+                        Padding="14">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Controle remoto por celular"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"/>
+                            <TextBlock Text="Controle o AlphaPlay pelo navegador do celular usando a mesma rede do computador."
+                                       Foreground="#9FB0D0"
+                                       TextWrapping="Wrap"
+                                       Margin="0,5,16,0"/>
+                        </StackPanel>
+
+                        <Button Grid.Column="1"
+                                Content="Abrir controle remoto"
+                                Width="190"
+                                VerticalAlignment="Center"
+                                Click="BtnRemoteControl_Click"/>
+                    </Grid>
+                </Border>
+
+                <StackPanel Grid.Row="4" Margin="0,22,0,0">
+                    <TextBlock Text="Vídeo"
+                               FontSize="16"
+                               FontWeight="SemiBold"/>
+                    <CheckBox x:Name="ChkShowVideoInMainWindow"
+                              Content="Mostrar vídeo na janela principal"/>
+                    <CheckBox x:Name="ChkAutoShowVideoForMp4"
+                              Content="Mostrar vídeo automaticamente ao tocar MP4"/>
+                    <CheckBox x:Name="ChkAutoHideVideoForMp3"
+                              Content="Ocultar vídeo automaticamente ao tocar MP3/áudio"/>
+
+                    <Separator Margin="0,18,0,14" Background="#374151"/>
+
+                    <TextBlock Text="Tela cheia / monitor separado"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,4"/>
+                    <CheckBox x:Name="ChkAutoFullscreenForVideo"
+                              Content="Abrir vídeo em tela cheia automaticamente"/>
+
+                    <TextBlock Text="Monitor para tela cheia"
+                               Foreground="#DCE7FF"
+                               Margin="0,14,0,6"/>
+                    <ComboBox x:Name="ComboFullscreenMonitor"
+                              Height="32"
+                              DisplayMemberPath="DisplayName"/>
+
+                    <CheckBox x:Name="ChkCloseFullscreenOnStop"
+                              Content="Fechar tela cheia ao parar música"/>
+                    <CheckBox x:Name="ChkCloseFullscreenOnAudio"
+                              Content="Fechar tela cheia ao tocar MP3/áudio"/>
+                </StackPanel>
+                </Grid>
+            </Border>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,14,0,0">
+            <Button Content="Cancelar"
+                    Width="100"
+                    Margin="0,0,8,0"
+                    Click="BtnCancel_Click"/>
+            <Button Content="Salvar"
+                    Width="120"
+                    Click="BtnSave_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
