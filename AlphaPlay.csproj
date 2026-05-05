@@ -10,9 +10,9 @@
     <ApplicationIcon>assets\brand\app_icon.ico</ApplicationIcon>
     <AssemblyName>AlphaPlay</AssemblyName>
     <RootNamespace>AlphaPlay</RootNamespace>
-    <Version>1.0.2</Version>
-    <AssemblyVersion>1.0.2</AssemblyVersion>
-    <FileVersion>1.0.2</FileVersion>
+    <Version>1.0.3</Version>
+    <AssemblyVersion>1.0.3</AssemblyVersion>
+    <FileVersion>1.0.3</FileVersion>
     <Authors>AlphaPlay</Authors>
     <Product>AlphaPlay</Product>
   </PropertyGroup>
@@ -43,6 +43,7 @@
   </ItemGroup>
 
 </Project>
+
 
 
 

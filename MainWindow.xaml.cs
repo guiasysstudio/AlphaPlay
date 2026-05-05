@@ -845,18 +845,15 @@ namespace AlphaPlay
         {
             _savedPlaylists.Clear();
 
-            foreach (PlaylistInfo playlist in DatabaseService.ListPlaylists())
+            foreach (PlaylistInfo playlist in SequenceFileService.ListSequences())
             {
                 _savedPlaylists.Add(playlist);
             }
 
-            if (selectPlaylistId.HasValue)
+            if (!string.IsNullOrWhiteSpace(_currentPlaylistName))
             {
-                ComboSavedSequences.SelectedItem = _savedPlaylists.FirstOrDefault(p => p.Id == selectPlaylistId.Value);
-            }
-            else if (_currentPlaylistId.HasValue)
-            {
-                ComboSavedSequences.SelectedItem = _savedPlaylists.FirstOrDefault(p => p.Id == _currentPlaylistId.Value);
+                ComboSavedSequences.SelectedItem = _savedPlaylists.FirstOrDefault(p =>
+                    string.Equals(p.Name, _currentPlaylistName, StringComparison.OrdinalIgnoreCase));
             }
         }
 
@@ -1655,11 +1652,11 @@ namespace AlphaPlay
                 return;
             }
 
-            PlaylistInfo saved = DatabaseService.SavePlaylist(name, _sequence.Select(item => item.Music), playlistId);
-            _currentPlaylistId = saved.Id;
+            PlaylistInfo saved = SequenceFileService.SaveSequence(name, _sequence.Select(item => item.Music));
+            _currentPlaylistId = null;
             _currentPlaylistName = saved.Name;
-            LoadSavedPlaylists(saved.Id);
-            System.Windows.MessageBox.Show($"Sequência '{saved.Name}' salva com sucesso.", "AlphaPlay");
+            LoadSavedPlaylists();
+            System.Windows.MessageBox.Show($"Sequência '{saved.Name}' salva com sucesso em:\n\n{saved.FilePath}", "AlphaPlay");
         }
 
         private void BtnLoadSequence_Click(object sender, RoutedEventArgs e)
@@ -1677,19 +1674,56 @@ namespace AlphaPlay
         {
             _sequence.Clear();
 
-            foreach (MusicFile music in DatabaseService.LoadPlaylistItems(playlist.Id))
+            List<string> lines = SequenceFileService.LoadSequenceLines(playlist.FilePath);
+            int missingCount = 0;
+
+            foreach (string line in lines)
             {
+                MusicFile music = FindMusicForSequenceLine(line);
+                if (music.IsMissing)
+                {
+                    missingCount++;
+                }
+
                 _sequence.Add(new SequenceItem { Music = music });
             }
 
-            _currentPlaylistId = playlist.Id;
+            _currentPlaylistId = null;
             _currentPlaylistName = playlist.Name;
             RefreshSequenceMissingStatus();
-            int missingCount = CountMissingSequenceItems();
+            missingCount = CountMissingSequenceItems();
             TxtNowPlaying.Text = $"Sequência carregada: {playlist.Name}";
             TxtStatus.Text = missingCount > 0
                 ? $"Sequência carregada com {missingCount} arquivo(s) não encontrado(s)"
                 : "Sequência carregada";
+        }
+
+        private MusicFile FindMusicForSequenceLine(string line)
+        {
+            string normalizedLine = NormalizeSearchText(line);
+            string lineFileName = NormalizeSearchText(Path.GetFileName(line));
+            string lineTitle = NormalizeSearchText(Path.GetFileNameWithoutExtension(line));
+
+            MusicFile? found = _allMusics.FirstOrDefault(music =>
+                string.Equals(NormalizeSearchText(music.FileName), lineFileName, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(NormalizeSearchText(Path.GetFileNameWithoutExtension(music.FileName)), lineTitle, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(NormalizeSearchText(music.Title), lineTitle, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(NormalizeSearchText(music.FilePath), normalizedLine, StringComparison.OrdinalIgnoreCase));
+
+            if (found != null)
+            {
+                found.IsMissing = !File.Exists(found.FilePath);
+                return found;
+            }
+
+            return new MusicFile
+            {
+                Title = Path.GetFileNameWithoutExtension(line),
+                FileName = Path.GetFileName(line),
+                FilePath = line,
+                Extension = Path.GetExtension(line),
+                IsMissing = true
+            };
         }
 
         private void BtnDeleteSequence_Click(object sender, RoutedEventArgs e)
@@ -1711,9 +1745,9 @@ namespace AlphaPlay
                 return;
             }
 
-            DatabaseService.DeletePlaylist(selectedPlaylist.Id);
+            SequenceFileService.DeleteSequence(selectedPlaylist.FilePath);
 
-            if (_currentPlaylistId == selectedPlaylist.Id)
+            if (string.Equals(_currentPlaylistName, selectedPlaylist.Name, StringComparison.OrdinalIgnoreCase))
             {
                 _currentPlaylistId = null;
                 _currentPlaylistName = string.Empty;

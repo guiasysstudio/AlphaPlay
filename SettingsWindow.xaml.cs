@@ -51,6 +51,7 @@ namespace AlphaPlay
             ChkCloseFullscreenOnStop.IsChecked = Settings.CloseFullscreenOnStop;
             ChkCloseFullscreenOnAudio.IsChecked = Settings.CloseFullscreenOnAudio;
             SelectConfiguredMonitor();
+            TxtSequencesFolder.Text = AppFolderService.GetSequencesFolder();
         }
 
 
@@ -221,6 +222,22 @@ namespace AlphaPlay
         {
             DialogResult = false;
             Close();
+        }
+
+        private void BtnOpenSequencesFolder_Click(object sender, RoutedEventArgs e)
+        {
+            string folder = AppFolderService.GetSequencesFolder();
+
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = folder,
+                UseShellExecute = true
+            });
         }
 
         private void BtnRemoteControl_Click(object sender, RoutedEventArgs e)

@@ -60,6 +60,20 @@ namespace AlphaPlay.Services
             return appDataFolder;
         }
 
+
+        public static string GetSequencesFolder()
+        {
+            string documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string sequencesFolder = Path.Combine(documents, "AlphaPlay", "Sequencias");
+
+            if (!Directory.Exists(sequencesFolder))
+            {
+                Directory.CreateDirectory(sequencesFolder);
+            }
+
+            return sequencesFolder;
+        }
+
         public static string GetDatabasePath()
         {
             return Path.Combine(GetAppDataFolder(), "alphaplay.db");
