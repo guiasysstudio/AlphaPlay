@@ -2,6 +2,7 @@
 obj/
 publish/
 installer/output/
+release-final/
 .vs/
 *.user
 *.suo

@@ -1091,6 +1091,17 @@ namespace AlphaPlay
         }
 
 
+
+        private void BtnCheckUpdates_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateCheckWindow window = new()
+            {
+                Owner = this
+            };
+
+            window.ShowDialog();
+        }
+
         private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             ApplySearch();
